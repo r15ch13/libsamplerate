@@ -5,7 +5,7 @@ platform:
   - x64
 configuration:
   - Release
-image: Visual Studio 2015
+image: Visual Studio 2013
 init:
   - ps: iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
   - ps: $ErrorActionPreference = 'SilentlyContinue'; scoop bucket add extras #Why does AppVeyor hate this
@@ -18,14 +18,10 @@ before_build:
   - cmd: mklink /h %src%\libsndfile-1.def "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.def"
   - cmd: mklink /h %src%\Win32\sndfile.h "%userprofile%\scoop\apps\libsndfile\current\include\sndfile.h"
 build_script:
-  - ps: $vsbin = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 14.0\VC\bin" #Does this need to be hardcoded
+  - ps: $vsbin = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 12.0\VC\bin" #Does this need to be hardcoded
   - ps: echo "vsbin = ${vsbin}"
   - ps: cd "$vsbin"; cd ..; $vspath = $(.$env:src\Win32\shortname.cmd .)
   - ps: echo "vspath =  $vspath"
-  - cmd: mkdir "$vspath\PlatformSDK"
-  - cmd: mklink /D "$vspath\PlatformSDK\Include" "${env:ProgramFiles(x86)}\Windows Kits\10\Include\10.0.10240.0\ucrt"
-  - cmd: cd "%ProgramFiles(x86)%" && dir /s stdio.h
-  - ps: ls "$vspath\PlatformSDK"
   - ps: sc $env:src\Win32\Makefile.msvc ((gc $env:src\Win32\Makefile.msvc) -replace "^MSVCDir=.*","MSVCDir=$vspath")
   - ps: $env:PATH="$vsbin;$env:PATH"
   - ps: cd $env:src; .\Make.bat
