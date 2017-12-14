@@ -22,6 +22,7 @@ build_script:
   - ps: echo "vsbin = ${vsbin}"
   - ps: cd "$vsbin"; cd ..; $vspath = $(.$env:src\Win32\shortname.cmd .)
   - ps: echo "vspath =  $vspath"
+  - ps: .$vspath\vcvarsall.bat
   - ps: sc $env:src\Win32\Makefile.msvc ((gc $env:src\Win32\Makefile.msvc) -replace "^MSVCDir=.*","MSVCDir=$vspath")
   - ps: $env:PATH="$vsbin;$env:PATH"
   - ps: cd $env:src; .\Make.bat
