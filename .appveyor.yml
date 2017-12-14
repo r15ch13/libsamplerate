@@ -18,7 +18,7 @@ before_build:
   - cmd: mklink /h %src%\libsndfile-1.def "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.def"
   - cmd: mklink /h %src%\Win32\sndfile.h "%userprofile%\scoop\apps\libsndfile\current\include\sndfile.h"
 build_script:
-  - ps: $vsbin = "$(cmd /c where cl)"
+  - ps: $vsbin = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 14.0\VC\bin" #Does this need to be hardcoded
   - ps: echo "Detected Visual Studio ${vsbin}"
   - ps: cd $vsbin; cd ..; $vspath = $(.\Win32\shortname.cmd .)
   - ps: sc $env:src\Win32\Makefile.msvc ((gc $env:src\Win32\Makefile.msvc) -replace "^MSVCDir=.*","MSVCDir=$vspath")
