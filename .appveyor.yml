@@ -21,4 +21,4 @@ build_script:
   - ps: $vsbin = $(cmd /c where cl)
   - ps: cd $vsbin; cd ..; $vspath = $(.\Win32\shortname.cmd .)
   - ps: sc $env:src\Win32\Makefile.msvc ((gc $env:src\Win32\Makefile.msvc) -replace "^MSVCDir=.*","MSVCDir=$vspath")
-  - ps: $env:src\Make.bat
+  - ps: .$env:src\Make.bat
