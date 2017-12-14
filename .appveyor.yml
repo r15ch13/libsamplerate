@@ -15,7 +15,7 @@ before_build:
   - cmd: mklink /h libsndfile-1.dll "%userprofile%\scoop\apps\libsndfile\current\bin\libsndfile-1.dll"
   - cmd: mklink /h libsndfile-1.lib "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.lib"
   - cmd: mklink /h libsndfile-1.def "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.def"
-  - cmd: mklink /h Win32/sndfile.h "%userprofile%\scoop\apps\libsndfile\current\include\sndfile.h"
+  - cmd: mklink /h Win32\sndfile.h "%userprofile%\scoop\apps\libsndfile\current\include\sndfile.h"
 build_script:
   - ps: $vsbin = $(cmd /c where cl)
   - ps: cd $vsbin; cd ..; $vspath = $(.\Win32\shortname.cmd .)
