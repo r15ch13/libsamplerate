@@ -22,7 +22,7 @@ build_script:
   - ps: echo "vsbin = ${vsbin}"
   - ps: cd "$vsbin"; cd ..; $vspath = $(.$env:src\Win32\shortname.cmd .)
   - ps: echo "vspath =  $vspath"
-  - cmd: mkdir "$vspath\PlatformSDK\Include"
+  - cmd: mkdir "$vspath\PlatformSDK"
   - cmd: mklink /D "$vspath\PlatformSDK\Include" "${env:ProgramFiles(x86)}\Windows Kits\10\Include\10.0.10240.0\ucrt"
   - ps: sc $env:src\Win32\Makefile.msvc ((gc $env:src\Win32\Makefile.msvc) -replace "^MSVCDir=.*","MSVCDir=$vspath")
   - ps: $env:PATH="$vsbin;$env:PATH"
