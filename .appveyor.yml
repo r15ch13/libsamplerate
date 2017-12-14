@@ -12,13 +12,13 @@ init:
 install:
   - ps: scoop install libsndfile
 before_build:
-  - ps: $proj = $env:APPVEYOR_BUILD_FOLDER
-  - cmd: mklink /h $proj\libsndfile-1.dll "%userprofile%\scoop\apps\libsndfile\current\bin\libsndfile-1.dll"
-  - cmd: mklink /h $proj\libsndfile-1.lib "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.lib"
-  - cmd: mklink /h $proj\libsndfile-1.def "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.def"
-  - cmd: mklink /h $proj\Win32\sndfile.h "%userprofile%\scoop\apps\libsndfile\current\include\sndfile.h"
+  - ps: $env:src = $env:APPVEYOR_BUILD_FOLDER
+  - cmd: mklink /h %src%\libsndfile-1.dll "%userprofile%\scoop\apps\libsndfile\current\bin\libsndfile-1.dll"
+  - cmd: mklink /h %src%\libsndfile-1.lib "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.lib"
+  - cmd: mklink /h %src%\libsndfile-1.def "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.def"
+  - cmd: mklink /h %src%\Win32\sndfile.h "%userprofile%\scoop\apps\libsndfile\current\include\sndfile.h"
 build_script:
   - ps: $vsbin = $(cmd /c where cl)
   - ps: cd $vsbin; cd ..; $vspath = $(.\Win32\shortname.cmd .)
-  - ps: sc $proj\Win32\Makefile.msvc ((gc $proj\Win32\Makefile.msvc) -replace "^MSVCDir=.*","MSVCDir=$vspath")
-  - ps: $proj\Make.bat
+  - ps: sc $env:src\Win32\Makefile.msvc ((gc $env:src\Win32\Makefile.msvc) -replace "^MSVCDir=.*","MSVCDir=$vspath")
+  - ps: $env:src\Make.bat
