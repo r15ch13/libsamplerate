@@ -7,9 +7,8 @@ configuration:
   - Release
 image: Visual Studio 2015
 init:
-  - ps: $ErrorActionPreference = "silentlycontinue"
   - ps: iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
-  - ps: scoop bucket add extras
+  - ps: scoop bucket add extras -ea SilentlyContinue
 install:
   - ps: scoop install libsndfile
 before_build:
