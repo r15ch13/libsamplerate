@@ -20,7 +20,7 @@ before_build:
 build_script:
   - ps: $vsbin = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 14.0\VC\bin" #Does this need to be hardcoded
   - ps: echo "vsbin = ${vsbin}"
-  - ps: cd "$vsbin"; cd ..; $vspath = $($env:src\\Win32\shortname.cmd .)
+  - ps: cd "$vsbin"; cd ..; $vspath = $(.$env:src\Win32\shortname.cmd .)
   - ps: echo "vspath =  ${vspath}"
   - ps: sc $env:src\Win32\Makefile.msvc ((gc $env:src\Win32\Makefile.msvc) -replace "^MSVCDir=.*","MSVCDir=$vspath")
   - ps: cd $env:src; .\Make.bat
