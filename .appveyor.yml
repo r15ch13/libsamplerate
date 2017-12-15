@@ -13,7 +13,7 @@ init:
   - # FIXME Does this need to be hard coded
   - ps: $env:SRC    = "$env:APPVEYOR_BUILD_FOLDER"
   - ps: $env:VSBIN  = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 12.0\VC\bin"
-  - ps: $env:VSPATH = "$(.$env:SRC\Win32\shortname.cmd "$env:VSBIN\..")"
+  - ps: $env:VSPATH = "$(.${env:SRC}\Win32\shortname.cmd "$env:VSBIN\..")"
   - ps: $env:PATH   = "$env:VSBIN;$env:PATH"
   - ps: echo "Using"
   - ps: echo "   env:VSBIN  = $env:VSBIN"
