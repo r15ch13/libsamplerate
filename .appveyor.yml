@@ -5,35 +5,14 @@ platform:
   - x64
 configuration:
   - Release
-image: Visual Studio 2013
+image: Visual Studio 2015
 init:
   - ps: iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
   - ps: scoop update
   - ps: $ErrorActionPreference = 'SilentlyContinue'; scoop bucket add extras
   - ps: If ("$env:PLATFORM" -eq "x86") { $env:ARCH="32bit" } Else { $env:ARCH="64bit" }
 install:
-  - ps: scoop install --arch $env:ARCH libsndfile
-before_build:
-  - # FIXME Does this need to be hard coded
-  - ps: $env:VSBIN  = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 12.0\VC\bin"
-  - ps: $env:VSKIT  = "${env:ProgramFiles(x86)}\Windows Kits\8.0"
-  - ps: $env:KITLIB = "$env:VSKIT\Lib\win8\um\$env:PLATFORM"
-  - ps: $env:SRC    = "$env:APPVEYOR_BUILD_FOLDER"
-  - ps: $env:VSPATH = "$(."$env:SRC\Win32\shortname.cmd" "$env:VSBIN\..")"
-  - ps: $env:PATH   = "$env:VSBIN;$env:PATH"
-  - ps: echo "Using"
-  - ps: echo "   env:VSBIN  = $env:VSBIN"
-  - ps: echo "   env:VSPATH = $env:VSPATH"
-  - ps: echo "   env:SRC    = $env:SRC"
-  - #
-  - cmd: mkdir "%VSPATH%\PlatformSDK\Include"
-  - cmd: mklink /h %VSPATH%\PlatformSDK\Include\Windows.h "%VSKIT%\Include\um\Windows.h"
-  - cmd: mklink /h %VSPATH%\PlatformSDK\Include\winapifamily.h "%VSKIT%\Include\shared\winapifamily.h"
-  - cmd: mklink /h %VSPATH%\Lib\kernel32.lib "%KITLIB%\kernel32.lib"
-  - cmd: mklink /h %SRC%\libsndfile-1.dll "%userprofile%\scoop\apps\libsndfile\current\bin\libsndfile-1.dll"
-  - cmd: mklink /h %SRC%\libsndfile-1.lib "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.lib"
-  - cmd: mklink /h %SRC%\libsndfile-1.def "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.def"
-  - cmd: mklink /h %SRC%\Win32\sndfile.h "%userprofile%\scoop\apps\libsndfile\current\include\sndfile.h"
-  - ps: sc $env:SRC\Win32\Makefile.msvc ((gc $env:SRC\Win32\Makefile.msvc) -replace "^MSVCDir=.*","MSVCDir=$env:VSPATH")
+  - ps: scoop install libsndfile cmake pkg-config --arch $env:ARCH
 build_script:
-  - ps: cd $env:SRC; .\Make.bat
+  - ps: cmake $env:APPVEYOR_BUILD_FOLDER
+  - ps: cmake --build $env:APPVEYOR_BUILD_FOLDER
