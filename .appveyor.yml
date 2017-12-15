@@ -24,8 +24,7 @@ before_build:
   - ps: echo "   env:VSPATH = $env:VSPATH"
   - ps: echo "   env:SRC    = $env:SRC"
   - #
-  - cmd: mkdir %VSPATH%\PlatformSDK
-  - cmd: mklink /d %VSPATH%\PlatformSDK\Lib "%VSKIT%"
+  - cmd: mklink /d %VSPATH%\Lib\kernel32.lib "%VSKIT%\kernel32.lib"
   - cmd: mklink /h %SRC%\libsndfile-1.dll "%userprofile%\scoop\apps\libsndfile\current\bin\libsndfile-1.dll"
   - cmd: mklink /h %SRC%\libsndfile-1.lib "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.lib"
   - cmd: mklink /h %SRC%\libsndfile-1.def "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.def"
