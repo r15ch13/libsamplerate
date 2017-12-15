@@ -9,7 +9,7 @@ image: Visual Studio 2013
 init:
   - ps: iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
   - ps: scoop update
-  - ps: scoop bucket add extras
+  - ps: $ErrorActionPreference = 'SilentlyContinue'; scoop bucket add extras
   - # FIXME Does this need to be hard coded
   - ps: $env:VSBIN  = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 12.0\VC\bin"
   - ps: $env:VSPATH = "$(.$env:SRC\Win32\shortname.cmd "$env:VSBIN\..")"
