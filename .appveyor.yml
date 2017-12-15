@@ -10,7 +10,7 @@ init:
   - ps: iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
   - ps: scoop update
   - ps: $ErrorActionPreference = 'SilentlyContinue'; scoop bucket add extras
-  - ps: If ("$env:PLATFORM" -eq "x86") { $env:ARCH="32-bit" } Else { $env:ARCH="64-bit" }
+  - ps: If ("$env:PLATFORM" -eq "x86") { $env:ARCH="32bit" } Else { $env:ARCH="64bit" }
 install:
   - ps: scoop install --arch $env:ARCH libsndfile
 before_build:
