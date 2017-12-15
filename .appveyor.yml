@@ -10,19 +10,22 @@ init:
   - ps: iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
   - ps: scoop update
   - ps: scoop bucket add extras
+  - # FIXME Does this need to be hard coded
+  - ps: $env:VSBIN  = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 12.0\VC\bin"
+  - ps: $env:VSPATH = "$(.$env:SRC\Win32\shortname.cmd "$env:VSBIN\..")"
+  - ps: $env:PATH   = "$env:VSBIN;$env:PATH"
+  - ps: $env:SRC    = "$env:APPVEYOR_BUILD_FOLDER"
+  - ps: echo "Using"
+  - ps: echo "   env:VSBIN  = $env:VSBIN"
+  - ps: echo "   env:VSPATH = $env:VSPATH"
+  - ps: echo "   env:SRC    = $env:SRC"
 install:
   - ps: scoop install libsndfile
 before_build:
-  - ps: $env:src = $env:APPVEYOR_BUILD_FOLDER
-  - cmd: mklink /h %src%\libsndfile-1.dll "%userprofile%\scoop\apps\libsndfile\current\bin\libsndfile-1.dll"
-  - cmd: mklink /h %src%\libsndfile-1.lib "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.lib"
-  - cmd: mklink /h %src%\libsndfile-1.def "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.def"
-  - cmd: mklink /h %src%\Win32\sndfile.h "%userprofile%\scoop\apps\libsndfile\current\include\sndfile.h"
+  - cmd: mklink /h %SRC%\libsndfile-1.dll "%userprofile%\scoop\apps\libsndfile\current\bin\libsndfile-1.dll"
+  - cmd: mklink /h %SRC%\libsndfile-1.lib "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.lib"
+  - cmd: mklink /h %SRC%\libsndfile-1.def "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.def"
+  - cmd: mklink /h %SRC%\Win32\sndfile.h "%userprofile%\scoop\apps\libsndfile\current\include\sndfile.h"
+  - ps: sc $env:SRC\Win32\Makefile.msvc ((gc $env:SRC\Win32\Makefile.msvc) -replace "^MSVCDir=.*","MSVCDir=$env:VSPATH")
 build_script:
-  - ps: $vsbin = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 12.0\VC\bin" #Does this need to be hardcoded
-  - ps: echo "vsbin = ${vsbin}"
-  - ps: cd "$vsbin"; cd ..; $vspath = $(.$env:src\Win32\shortname.cmd .)
-  - ps: echo "vspath =  $vspath"
-  - ps: sc $env:src\Win32\Makefile.msvc ((gc $env:src\Win32\Makefile.msvc) -replace "^MSVCDir=.*","MSVCDir=$vspath")
-  - ps: $env:PATH="$vsbin;$env:PATH"
-  - ps: cd $env:src; .\Make.bat
+  - ps: cd $env:SRC; .\Make.bat
