@@ -8,7 +8,8 @@ configuration:
 image: Visual Studio 2013
 init:
   - ps: iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
-  - ps: $ErrorActionPreference = 'SilentlyContinue'; scoop bucket add extras #Why does AppVeyor hate this
+  - ps: scoop update
+  - ps: scoop bucket add extras
 install:
   - ps: scoop install libsndfile
 before_build:
