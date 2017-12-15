@@ -10,19 +10,19 @@ init:
   - ps: iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
   - ps: scoop update
   - ps: $ErrorActionPreference = 'SilentlyContinue'; scoop bucket add extras
+install:
+  - ps: scoop install libsndfile
+before_build:
   - # FIXME Does this need to be hard coded
-  - ps: $env:SRC    = "$env:APPVEYOR_BUILD_FOLDER"
   - ps: $env:VSBIN  = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 12.0\VC\bin"
-  - ps: cmd /c "%SRC%\Win32\shortname.cmd" "%VSBIN%\.."
-  - ps: $env:VSPATH = "$(cmd /c "%SRC%\Win32\shortname.cmd" "%VSBIN%\..")"
+  - ps: $env:SRC    = "$env:APPVEYOR_BUILD_FOLDER"
+  - ps: $env:VSPATH = "$(."$env:SRC\Win32\shortname.cmd" "$env:VSBIN\..")"
   - ps: $env:PATH   = "$env:VSBIN;$env:PATH"
   - ps: echo "Using"
   - ps: echo "   env:VSBIN  = $env:VSBIN"
   - ps: echo "   env:VSPATH = $env:VSPATH"
   - ps: echo "   env:SRC    = $env:SRC"
-install:
-  - ps: scoop install libsndfile
-before_build:
+  - #
   - cmd: mklink /h %SRC%\libsndfile-1.dll "%userprofile%\scoop\apps\libsndfile\current\bin\libsndfile-1.dll"
   - cmd: mklink /h %SRC%\libsndfile-1.lib "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.lib"
   - cmd: mklink /h %SRC%\libsndfile-1.def "%userprofile%\scoop\apps\libsndfile\current\lib\libsndfile-1.def"
