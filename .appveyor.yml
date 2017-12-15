@@ -10,9 +10,8 @@ init:
   - ps: iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
   - ps: scoop update
   - ps: $ErrorActionPreference = 'SilentlyContinue'; scoop bucket add extras
-  - ps: If ("$env:PLATFORM" -eq "x86") { $env:ARCH="32bit" } Else { $env:ARCH="64bit" }
 install:
-  - ps: scoop install libsndfile cmake pkg-config --arch $env:ARCH
+  - ps: scoop install libsndfile cmake pkg-config --arch $env:PLATFORM
 build_script:
   - ps: cmake $env:APPVEYOR_BUILD_FOLDER
   - ps: cmake --build $env:APPVEYOR_BUILD_FOLDER
